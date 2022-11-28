@@ -36,8 +36,8 @@ pub fn run() -> Result<(), String> {
 
     let mut canvas = window
         .into_canvas()
-        .software()
-        // .accelerated()
+        // .software()
+        .accelerated()
         .build()
         .map_err(|e| e.to_string())?;
 
@@ -109,8 +109,15 @@ pub fn run() -> Result<(), String> {
 }
 
 
+fn copyright_notices() {
+    println!("This software makes usage of external libraries MIT licensed to build and/or run. They are listed below");
+    println!("\t - \"sdl2\" via https://crates.io/crates/sdl2");
+    println!("\t - \"tiled\" via https://crates.io/crates/tiled");
+}
+
 
 fn main() -> Result<(), String> {
+    copyright_notices();
     run()?;
 
     Ok(())
