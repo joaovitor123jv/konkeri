@@ -39,3 +39,4 @@ impl Rect {
         SdlRect::new(self.point.x, self.point.y, self.width, self.height)
     }
 }
+

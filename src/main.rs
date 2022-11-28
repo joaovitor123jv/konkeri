@@ -17,7 +17,6 @@ use globals::Global;
 use map::Map;
 
 
-
 pub fn run() -> Result<(), String> {
     let mut globals = Global::new();
     let png = Path::new("assets/cursor.png");
@@ -36,20 +35,20 @@ pub fn run() -> Result<(), String> {
 
     let mut canvas = window
         .into_canvas()
-        // .software()
-        .accelerated()
+        .software()
+        // .accelerated()
         .build()
         .map_err(|e| e.to_string())?;
 
     let texture_creator = canvas.texture_creator();
     let texture = texture_creator.load_texture(&png)?;
-    // let mut map = Map::load("assets/maps/city-iso-2.tmx", &texture_creator);
-    let mut map = Map::load("assets/maps/map-iso-1.tmx", &texture_creator);
-    // map.calc_zoomed_values(&globals);
-    // map.offset.y = -350;
-    map.offset.y = -500;
-    map.offset.x = -250;
-    // map.calc_zoomed_values(&globals);
+    let mut map = Map::load("assets/maps/city-iso-2.tmx", &texture_creator);
+    map.offset.x = -64;
+    map.offset.y = -32;
+
+    // let mut map = Map::load("assets/maps/map-iso-1.tmx", &texture_creator);
+    // map.offset.y = -500;
+    // map.offset.x = -250;
 
     let mut i = 0;
     let mut rectangle = Rect::new(0, 0, 128, 256).to_sdl2();
@@ -58,6 +57,10 @@ pub fn run() -> Result<(), String> {
     let mut is_clicking: bool = false;
 
     map.calc_zoomed_values(&globals);
+
+
+
+
 
     'mainloop: loop {
         i = (i + 1) % 255;
@@ -99,6 +102,7 @@ pub fn run() -> Result<(), String> {
         }
 
         map.render(&mut canvas, &globals);
+       
         canvas.copy(&texture, None, rectangle)?; // barril (cursor)
         canvas.present();
 

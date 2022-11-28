@@ -1,5 +1,6 @@
 extern crate sdl2;
 
+use sdl2::controller;
 use tiled::Loader;
 use tiled::Map as TmxMap;
 use sdl2::image::LoadTexture;
@@ -7,6 +8,7 @@ use std::collections::HashMap;
 
 use crate::globals::Global;
 use crate::point::Point;
+use crate::rect::Rect;
 
 pub struct Map<'map> {
     pub loaded_map: TmxMap,
@@ -19,7 +21,10 @@ pub struct Map<'map> {
 }
 
 impl <'map>Map<'map> {
-    pub fn load(tmx_path: &str, texture_creator: &'map sdl2::render::TextureCreator<sdl2::video::WindowContext>) -> Self {
+    pub fn load(
+        tmx_path: &str,
+        texture_creator: &'map sdl2::render::TextureCreator<sdl2::video::WindowContext>
+    ) -> Self {
         let mut loader = Loader::new();
         let map = match loader.load_tmx_map(tmx_path) {
             Ok(map) => map,
@@ -77,15 +82,11 @@ impl <'map>Map<'map> {
                         }
                     },
                     None => {
-                        tiles_images.insert(tile_id, taken_pathes);
+                        tiles_images.insert(tile_id, taken_pathes - 1);
                     }
                 };
-                // println!("Tile {} type = {:?}", tile_id, tile.image);
             }
         }
-
-        // println!("Loaded Images = {:?}", pathes);
-        // println!("Tiles Images = {:?}", tiles_images);
 
         // let mut loaded_tiles: HashMap<u32, sdl2::render::Texture> = HashMap::new();
 
@@ -133,27 +134,35 @@ impl <'map>Map<'map> {
         let tileset = tile.get_tileset();
         // let tilecount = tileset.tilecount;
 
-        let image_id = self.tiles_images.get(&tile.id()).unwrap();
+        let tile_id = tile.id();
+
+        let image_id = self.tiles_images.get(&tile_id).unwrap();
+        // let image_id = &0;
 
         match self.loaded_images.get(*image_id as usize) {
             Some(texture) => {
-                let _res = if tileset.tilecount == 1 {
-                    canvas.copy(texture,
-                                None,
-                                sdl2::rect::Rect::new(point.x + self.zoomed_offset.x,
-                                                      point.y + self.zoomed_offset.y,
-                                                      ((tileset.tile_width as f32) * globals.zoom) as u32,
-                                                      ((tileset.tile_height as f32) * globals.zoom) as u32))
-                } else {
-                    canvas.copy(texture,
-                                None,
-                                sdl2::rect::Rect::new(point.x + self.zoomed_offset.x,
-                                                      point.y + self.zoomed_offset.y,
-                                                      ((tileset.tile_width as f32) * globals.zoom) as u32,
-                                                      ((tileset.tile_height as f32) * globals.zoom) as u32))
-                };
+                let dest_rect = Rect::new(point.x + self.zoomed_offset.x,
+                                                point.y + self.zoomed_offset.y,
+                                                ((tileset.tile_width as f32) * globals.zoom) as u32,
+                                                ((tileset.tile_height as f32) * globals.zoom) as u32).to_sdl2();
+
+                let _res = match tileset.image {
+                    Some(..) => {
+                        let column_index = tile_id as i32 % tileset.columns as i32;
+                        let row_index: i32 = (tile_id / tileset.columns) as i32;
+
+                        let crop_rect = Rect::new(
+                            column_index * tileset.tile_width as i32,
+                            row_index * tileset.tile_height as i32,
+                            64,
+                            32);
+                        canvas.copy(texture, crop_rect.to_sdl2(), dest_rect)
+                    },
+                    None => canvas.copy(texture, None, dest_rect)
+                }; 
             },
-            None => {}
+            None => {
+            }
         };
     }
 

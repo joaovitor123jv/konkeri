@@ -15,7 +15,8 @@ impl Global {
         Self {
             window_width: 800,
             window_height: 600,
-            viewport: Rect::new(250, 550, 1050, 800),
+            // viewport: Rect::new(250, 550, 1050, 800),
+            viewport: Rect::new(0, 0, 1050, 800),
             zoom: 1.0,
             // fps_amount: 60
             fps_amount: 75
