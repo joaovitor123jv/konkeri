@@ -29,9 +29,17 @@ impl Rect {
     }
 
     // inclusive
+    #[allow(dead_code)]
     pub fn contains(&self, point: &Point) -> bool {
         let x_conditions = (point.x <= self.point.x + (self.width as i32)) && (point.x >= self.point.x);
         let y_conditions = (point.y <= self.point.y + (self.height as i32)) && (point.y >= self.point.y);
+        x_conditions && y_conditions
+    }
+
+    #[allow(dead_code)]
+    pub fn contains_xy(&self, x: i32, y: i32) -> bool {
+        let x_conditions = (x <= self.point.x + (self.width as i32)) && (x >= self.point.x);
+        let y_conditions = (y <= self.point.y + (self.height as i32)) && (y >= self.point.y);
         x_conditions && y_conditions
     }
 

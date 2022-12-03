@@ -2,7 +2,6 @@ extern crate sdl2;
 
 use std::time::Duration;
 use sdl2::event::Event;
-use sdl2::pixels::Color;
 use sdl2::image::{InitFlag, LoadTexture};
 use sdl2::keyboard::Keycode;
 use std::path::Path;
@@ -11,7 +10,11 @@ mod map;
 mod rect;
 mod point;
 mod globals;
+mod color;
+mod button;
 use rect::Rect;
+use button::Button;
+use color::Color;
 use globals::Global;
 // use point::Point;
 use map::Map;
@@ -20,6 +23,11 @@ use map::Map;
 pub fn run() -> Result<(), String> {
     let mut globals = Global::new();
     let png = Path::new("assets/cursor.png");
+    let mut button = Button::new("Botão de teste");
+    button.rect.point.x = 100;
+    button.rect.point.y = 100;
+    button.rect.width = 100;
+    button.rect.height = 100;
 
     let sdl_context = sdl2::init()?;
     let video_subsystem = sdl_context.video()?;
@@ -35,8 +43,8 @@ pub fn run() -> Result<(), String> {
 
     let mut canvas = window
         .into_canvas()
-        .software()
-        // .accelerated()
+        // .software()
+        .accelerated()
         .build()
         .map_err(|e| e.to_string())?;
 
@@ -59,12 +67,12 @@ pub fn run() -> Result<(), String> {
     map.calc_zoomed_values(&globals);
 
 
-
-
+    let mut cursor_x: i32 = 0;
+    let mut cursor_y: i32 = 0;
 
     'mainloop: loop {
         i = (i + 1) % 255;
-        canvas.set_draw_color(Color::RGB(i, 64, 255 - i));
+        canvas.set_draw_color(Color::new(i, 64, 255 - i).to_sdl2());
         canvas.clear();
         for event in event_pump.poll_iter() {
             match event {
@@ -72,8 +80,14 @@ pub fn run() -> Result<(), String> {
                     keycode: Option::Some(Keycode::Escape),
                     ..
                 } => break 'mainloop,
-                Event::MouseButtonDown { .. } => is_clicking = true,
-                Event::MouseButtonUp { .. } => is_clicking = false,
+                Event::MouseButtonDown { .. } => {
+                    is_clicking = true;
+                    button.update(cursor_x, cursor_y, is_clicking);
+                },
+                Event::MouseButtonUp { .. } => {
+                    is_clicking = false;
+                    button.update(cursor_x, cursor_y, is_clicking);
+                },
                 Event::Window { win_event, .. } => {
                     match win_event {
                         sdl2::event::WindowEvent::Resized(width, height) => {
@@ -89,8 +103,11 @@ pub fn run() -> Result<(), String> {
                     map.calc_zoomed_values(&globals);
                 },
                 Event::MouseMotion { x, y, xrel, yrel, .. } => {
+                    cursor_x = x;
+                    cursor_y = y;
                     rectangle.x = x - 64;
                     rectangle.y = y - 256;
+                    button.update(x, y, is_clicking);
 
                     if is_clicking {
                         globals.apply_offset(xrel, yrel);
@@ -102,6 +119,7 @@ pub fn run() -> Result<(), String> {
         }
 
         map.render(&mut canvas, &globals);
+        button.render(&mut canvas);
        
         canvas.copy(&texture, None, rectangle)?; // barril (cursor)
         canvas.present();
