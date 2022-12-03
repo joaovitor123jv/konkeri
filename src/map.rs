@@ -1,6 +1,5 @@
 extern crate sdl2;
 
-use sdl2::controller;
 use tiled::Loader;
 use tiled::Map as TmxMap;
 use sdl2::image::LoadTexture;
