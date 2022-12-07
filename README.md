@@ -4,5 +4,5 @@ To build this project you first need to [install](https://github.com/Rust-SDL2/r
 - [SDL2](https://github.com/libsdl-org/SDL)
 - [SDL2_Image](https://github.com/libsdl-org/SDL_image)
 - [SDL2_Mixer](https://github.com/libsdl-org/SDL_mixer)
-- [SDL2_TTF](https://sourceforge.net/projects/sdl2gfx/)
-- SDL2_GFX
+- [SDL2_TTF](https://github.com/libsdl-org/SDL_ttf)
+- [SDL2_GFX](https://sourceforge.net/projects/sdl2gfx/)
