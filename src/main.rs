@@ -1,15 +1,17 @@
 extern crate sdl2;
 
-use std::time::Duration;
+use clap::Parser;
 use sdl2::event::Event;
 use sdl2::image::{InitFlag, LoadTexture};
 use sdl2::keyboard::Keycode;
 use std::path::Path;
+use std::time::Duration;
 
-mod map;
-mod rect;
-mod point;
+mod cli;
 mod globals;
+mod map;
+mod point;
+mod rect;
 mod color;
 mod button;
 use rect::Rect;
@@ -19,9 +21,9 @@ use globals::Global;
 // use point::Point;
 use map::Map;
 
-
 pub fn run() -> Result<(), String> {
-    let mut globals = Global::new();
+    let mut globals = Global::from_cli_args(cli::CliArgs::parse());
+
     let png = Path::new("assets/cursor.png");
     let mut button = Button::new("Botão de teste");
     button.rect.point.x = 100;
@@ -35,7 +37,11 @@ pub fn run() -> Result<(), String> {
     let _image_context = sdl2::image::init(InitFlag::PNG | InitFlag::JPG)?;
 
     let window = video_subsystem
-        .window("rust-sdl2 demo: Video", globals.window_width, globals.window_height)
+        .window(
+            "rust-sdl2 demo: Video",
+            globals.window_width,
+            globals.window_height,
+        )
         .position_centered()
         .resizable()
         .build()
@@ -60,7 +66,7 @@ pub fn run() -> Result<(), String> {
 
     let mut i = 0;
     let mut rectangle = Rect::new(0, 0, 128, 256).to_sdl2();
-    
+
     let mut event_pump = sdl_context.event_pump()?;
     let mut is_clicking: bool = false;
 
@@ -76,7 +82,8 @@ pub fn run() -> Result<(), String> {
         canvas.clear();
         for event in event_pump.poll_iter() {
             match event {
-                Event::Quit { .. } | Event::KeyDown {
+                Event::Quit { .. }
+                | Event::KeyDown {
                     keycode: Option::Some(Keycode::Escape),
                     ..
                 } => break 'mainloop,
@@ -98,7 +105,7 @@ pub fn run() -> Result<(), String> {
                     };
                 }
 
-                Event::MouseWheel {  y, .. } => {
+                Event::MouseWheel { y, .. } => {
                     globals.apply_zoom(y);
                     map.calc_zoomed_values(&globals);
                 },
@@ -120,7 +127,7 @@ pub fn run() -> Result<(), String> {
 
         map.render(&mut canvas, &globals);
         button.render(&mut canvas);
-       
+
         canvas.copy(&texture, None, rectangle)?; // barril (cursor)
         canvas.present();
 
@@ -130,13 +137,11 @@ pub fn run() -> Result<(), String> {
     Ok(())
 }
 
-
 fn copyright_notices() {
     println!("This software makes usage of external libraries MIT licensed to build and/or run. They are listed below");
     println!("\t - \"sdl2\" via https://crates.io/crates/sdl2");
     println!("\t - \"tiled\" via https://crates.io/crates/tiled");
 }
-
 
 fn main() -> Result<(), String> {
     copyright_notices();
@@ -144,4 +149,3 @@ fn main() -> Result<(), String> {
 
     Ok(())
 }
-
