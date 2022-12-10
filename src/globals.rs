@@ -1,4 +1,4 @@
-use crate::rect::Rect;
+use crate::{cli::CliArgs, rect::Rect};
 
 const ZOOM_STEP: f32 = 0.25;
 
@@ -11,6 +11,7 @@ pub struct Global {
 }
 
 impl Global {
+    #[allow(dead_code)]
     pub fn new() -> Self {
         Self {
             window_width: 800,
@@ -19,7 +20,17 @@ impl Global {
             viewport: Rect::new(0, 0, 1050, 800),
             zoom: 1.0,
             // fps_amount: 60
-            fps_amount: 75
+            fps_amount: 75,
+        }
+    }
+
+    pub fn from_cli_args(args: CliArgs) -> Self {
+        Self {
+            window_width: args.width,
+            window_height: args.height,
+            viewport: Rect::new(0, 0, args.viewport_width, args.viewport_height),
+            zoom: args.zoom,
+            fps_amount: args.fps,
         }
     }
 
@@ -45,8 +56,8 @@ impl Global {
     }
 
     pub fn update_window_dimensions(&mut self, width: u32, height: u32) {
-        let width_diff =  (width as i32) - (self.window_width as i32);
-        let height_diff =  (height as i32) - (self.window_height as i32);
+        let width_diff = (width as i32) - (self.window_width as i32);
+        let height_diff = (height as i32) - (self.window_height as i32);
 
         self.window_width = width;
         self.window_height = height;
