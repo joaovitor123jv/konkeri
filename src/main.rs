@@ -14,9 +14,11 @@ mod point;
 mod rect;
 mod color;
 mod button;
+mod renderable_rect;
 use rect::Rect;
 use button::Button;
 use color::Color;
+use renderable_rect::RenderableRect;
 use globals::Global;
 // use point::Point;
 use map::Map;
@@ -26,6 +28,8 @@ pub fn run() -> Result<(), String> {
 
     let png = Path::new("assets/cursor.png");
     let mut button = Button::new("Botão de teste");
+
+    let mut mock_player = RenderableRect::new( Color::red(), 300, 150, 30, 30);
     button.rect.point.x = 100;
     button.rect.point.y = 100;
     button.rect.width = 100;
@@ -39,8 +43,8 @@ pub fn run() -> Result<(), String> {
     let window = video_subsystem
         .window(
             "rust-sdl2 demo: Video",
-            globals.window_width,
-            globals.window_height,
+            globals.window.width,
+            globals.window.height,
         )
         .position_centered()
         .resizable()
@@ -76,6 +80,8 @@ pub fn run() -> Result<(), String> {
     let mut cursor_x: i32 = 0;
     let mut cursor_y: i32 = 0;
 
+    mock_player.centralize(&globals.window);
+
     'mainloop: loop {
         i = (i + 1) % 255;
         canvas.set_draw_color(Color::new(i, 64, 255 - i).to_sdl2());
@@ -100,6 +106,7 @@ pub fn run() -> Result<(), String> {
                         sdl2::event::WindowEvent::Resized(width, height) => {
                             globals.update_window_dimensions(width as u32, height as u32);
                             map.calc_zoomed_values(&globals);
+                            mock_player.centralize(&globals.window);
                         },
                         _ => {}
                     };
@@ -108,6 +115,7 @@ pub fn run() -> Result<(), String> {
                 Event::MouseWheel { y, .. } => {
                     globals.apply_zoom(y);
                     map.calc_zoomed_values(&globals);
+                    mock_player.centralize(&globals.window);
                 },
                 Event::MouseMotion { x, y, xrel, yrel, .. } => {
                     cursor_x = x;
@@ -126,6 +134,8 @@ pub fn run() -> Result<(), String> {
         }
 
         map.render(&mut canvas, &globals);
+
+        mock_player.render(&mut canvas);
         button.render(&mut canvas);
 
         canvas.copy(&texture, None, rectangle)?; // barril (cursor)

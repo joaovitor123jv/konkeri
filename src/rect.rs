@@ -43,6 +43,22 @@ impl Rect {
         x_conditions && y_conditions
     }
 
+    #[allow(dead_code)]
+    pub fn centralize_vertical(&mut self, area: &Rect) {
+        self.point.y = (area.point.y + (area.height as i32 / 2)) - (self.height as i32 / 2);
+    }
+
+    #[allow(dead_code)]
+    pub fn centralize_horizontal(&mut self, area: &Rect) {
+        self.point.x = (area.point.x + (area.width as i32 / 2)) - (self.width as i32 / 2);
+    }
+
+    #[allow(dead_code)]
+    pub fn centralize(&mut self, area: &Rect) {
+        self.centralize_vertical(area);
+        self.centralize_horizontal(area);
+    }
+
     pub fn to_sdl2(&self) -> SdlRect {
         SdlRect::new(self.point.x, self.point.y, self.width, self.height)
     }
