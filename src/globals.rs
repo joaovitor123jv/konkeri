@@ -37,8 +37,8 @@ impl Global {
         if zoom_direction == ZOOM_IN {
             self.zoom += ZOOM_STEP;
 
-            if self.zoom > 10.0 {
-                self.zoom = 10.0;
+            if self.zoom > 4.0 {
+                self.zoom = 4.0;
             }
             println!("Zoom atual = {}", self.zoom);
         } else if zoom_direction == ZOOM_OUT {

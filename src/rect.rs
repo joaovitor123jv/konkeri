@@ -28,6 +28,18 @@ impl Rect {
         }
     }
 
+    #[allow(dead_code)]
+    pub fn set_size(&mut self, width: u32, height: u32) {
+        self.width = width;
+        self.height = height;
+    }
+
+    #[allow(dead_code)]
+    pub fn set_position(&mut self, x: i32, y: i32) {
+        self.point.x = x;
+        self.point.y = y;
+    }
+
     // inclusive
     #[allow(dead_code)]
     pub fn contains(&self, point: &Point) -> bool {

@@ -25,15 +25,14 @@ use map::Map;
 
 pub fn run() -> Result<(), String> {
     let mut globals = Global::from_cli_args(cli::CliArgs::parse());
+    let green_color = Color::green();
 
     let png = Path::new("assets/cursor.png");
     let mut button = Button::new("Botão de teste");
 
     let mut mock_player = RenderableRect::new( Color::red(), 300, 150, 30, 30);
-    button.rect.point.x = 100;
-    button.rect.point.y = 100;
-    button.rect.width = 100;
-    button.rect.height = 100;
+    button.rect.set_position(100, 100);
+    button.rect.set_size(100, 100);
 
     let sdl_context = sdl2::init()?;
     let video_subsystem = sdl_context.video()?;
@@ -68,7 +67,6 @@ pub fn run() -> Result<(), String> {
     // map.offset.y = -500;
     // map.offset.x = -250;
 
-    let mut i = 0;
     let mut rectangle = Rect::new(0, 0, 128, 256).to_sdl2();
 
     let mut event_pump = sdl_context.event_pump()?;
@@ -81,10 +79,9 @@ pub fn run() -> Result<(), String> {
     let mut cursor_y: i32 = 0;
 
     mock_player.centralize(&globals.window);
+    canvas.set_draw_color(green_color.to_sdl2());
 
     'mainloop: loop {
-        i = (i + 1) % 255;
-        canvas.set_draw_color(Color::new(i, 64, 255 - i).to_sdl2());
         canvas.clear();
         for event in event_pump.poll_iter() {
             match event {
@@ -139,6 +136,7 @@ pub fn run() -> Result<(), String> {
         button.render(&mut canvas);
 
         canvas.copy(&texture, None, rectangle)?; // barril (cursor)
+        canvas.set_draw_color(green_color.to_sdl2());
         canvas.present();
 
         ::std::thread::sleep(Duration::new(0, 1_000_000_000u32 / globals.fps_amount));

@@ -39,5 +39,4 @@ impl RenderableRect {
     pub fn centralize(&mut self, area: &Rect) {
         self.rect.centralize(area);
     }
-
 }
