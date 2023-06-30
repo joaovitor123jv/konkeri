@@ -6,8 +6,8 @@
     "activeFile": "city-iso-2.tmx",
     "expandedProjectPaths": [
         ".",
-        "grasslands",
-        "TilesetGrass"
+        "TilesetGrass",
+        "grasslands"
     ],
     "fileStates": {
         "/home/sgreyluy/twitch/konkeri/assets/mapa-teste.tmx": {
@@ -32,45 +32,45 @@
             "scale": 1,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 63999,
-                "y": 31998.5
+                "x": 64000,
+                "y": 31999
             }
         },
         "TilesetGrass/map1.tmx": {
             "scale": 1.3161458333333333,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 155.75781559161058,
-                "y": 336.2089434111595
+                "x": 168.6743173723783,
+                "y": 335.8290462999604
             }
         },
         "city-1.tmx": {
             "scale": 1.5,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 4022,
-                "y": 3998.9999999999995
+                "x": 4000,
+                "y": 4000
             }
         },
         "city-iso-2.tmx": {
             "scale": 1.5,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 15891.333333333332,
-                "y": 269
+                "x": 15999.666666666666,
+                "y": 8000
             }
         },
         "grasslands/grasslands.tsx": {
             "dynamicWrapping": false,
-            "scaleInDock": 0.33,
+            "scaleInDock": 1,
             "scaleInEditor": 1
         },
         "map-iso-1.tmx": {
             "scale": 0.75,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 64042.666666666664,
-                "y": 31998
+                "x": 63999.33333333333,
+                "y": 32000
             }
         }
     },
@@ -91,20 +91,19 @@
         "grasslands/grasslands.tsx",
         "TilesetGrass/grass_biome.tsx",
         "TilesetGrass/map1.tmx",
-        "city-1.tmx",
-        "/home/sgreyluy/twitch/konkeri/assets/mapa-teste.tmx"
+        "city-1.tmx"
     ],
     "project": "konkeri-city1.tiled-project",
     "recentFiles": [
         "TilesetGrass/map-iso-1.tmx",
         "TilesetGrass/kenney-ground.tsx",
         "map-iso-1.tmx",
-        "/home/sgreyluy/twitch/konkeri/assets/mapa-teste.tmx",
         "city-1.tmx",
         "TilesetGrass/map1.tmx",
         "TilesetGrass/grass_biome.tsx",
         "grasslands/grasslands.tsx",
-        "city-iso-2.tmx"
+        "city-iso-2.tmx",
+        "/home/sgreyluy/twitch/konkeri/assets/mapa-teste.tmx"
     ],
     "tileset.lastUsedFormat": "tsx",
     "tileset.tileSize": {
