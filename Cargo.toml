@@ -7,5 +7,6 @@ edition = "2021"
 
 [dependencies]
 tiled = "0.10.2"
-sdl2 = { version="0.35", default-features=false, features=["ttf","image","gfx","mixer"] }
-clap = { version="4.0.29", features=["derive"]} 
+sdl2 = { version="0.36", default-features=false, features=["ttf","image","mixer"] }
+clap = { version="4.0.29", features=["derive"]}
+chrono = "0.4.31"
